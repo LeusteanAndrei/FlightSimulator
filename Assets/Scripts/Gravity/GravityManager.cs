@@ -12,6 +12,7 @@ public class GravityManager : MonoBehaviour
     public bool runSimulation = false;
     List<GravitySource> gravitySources = new List<GravitySource>();
 
+
     private void Awake()
     {
         if(Instance != null && Instance!=this)
@@ -27,27 +28,10 @@ public class GravityManager : MonoBehaviour
 
     private void FixedUpdate()
     {
-        foreach(var source in gravitySources)
-            source.totalForce = Vector3.zero;   
 
         if (runSimulation)
         {
-            foreach (var source in gravitySources)
-            {
-                source.Unfreeze();
-                foreach (var target in gravitySources)
-                {
-                    if (target != source)
-                    {
-                        source.Attract(target);
-                    }
-                }
-            }
-
-            foreach (var source in gravitySources)
-            {
-                source.UpdateVelocity();
-            }
+            UpdateGravity(gravitySources);
         }
         else
         {
@@ -57,6 +41,30 @@ public class GravityManager : MonoBehaviour
     }
 
 
+    public void UpdateGravity(List<GravitySource> gravitySources )
+    {
+        foreach (var source in gravitySources)
+            source.totalForce = Vector3.zero;
+
+        foreach (var source in gravitySources)
+        {
+            source.Unfreeze();
+            foreach (var target in gravitySources)
+            {
+                if (target != source)
+                {
+                    source.Attract(target);
+                }
+            }
+        }
+
+        foreach (var source in gravitySources)
+        {
+            source.UpdateVelocity();
+        }
+        
+    }
+
     public void Register(GravitySource gravitySource)
     {
         gravitySources.Add(gravitySource);
@@ -65,6 +73,11 @@ public class GravityManager : MonoBehaviour
     public void Deregister(GravitySource gravitySource)
     {
         gravitySources.Remove(gravitySource);
+    }
+
+    public List<GravitySource> GetSources() { return gravitySources; }
+    private void OnDrawGizmos()
+    {
     }
 
 }

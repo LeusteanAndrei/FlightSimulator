@@ -25,5 +25,6 @@ public class UniverseConstants : MonoBehaviour
     {
         gravitationalConstant = _gravitationalConstant;
         fixedTimeStep = _fixedTimeStep;
+        Time.fixedDeltaTime = UniverseConstants.fixedTimeStep;
     }
 }

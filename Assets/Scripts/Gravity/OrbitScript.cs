@@ -10,7 +10,8 @@ public class OrbitScript : MonoBehaviour
     {
         thisPlanet = GetComponent<GravitySource>();
     }
-
+    public GravitySource Planet()
+    { return thisPlanet; }
     public Vector3 GetStartOrbitVelocity()
     {
         if(parentPlanet == null || thisPlanet == null) return Vector3.zero;

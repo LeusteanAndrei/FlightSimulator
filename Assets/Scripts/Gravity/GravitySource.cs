@@ -13,14 +13,18 @@ public class GravitySource : MonoBehaviour
 
     [SerializeField] public Vector3 totalForce = Vector3.zero;
     [SerializeField] public bool attractOthers = true;
-    
 
-   
 
     [SerializeField] Rigidbody _rigidBody = null;
     public Rigidbody rigidBody => _rigidBody;
-
     [SerializeField] private bool frozen = false;
+
+    [Header("Gizmo information")]
+    [SerializeField] public float gMin = 0.0001f;
+    [SerializeField] public bool showField = true;
+
+   
+
 
     public void Awake()
     {
@@ -46,10 +50,16 @@ public class GravitySource : MonoBehaviour
     }
 
 
+    public void SetupOrbitVelocity()
+    {
+        OrbitScript orbitScript = GetComponent<OrbitScript>();
+        if (orbitScript != null && orbitScript.enabled)
+        {
+            this.SetStartVelocity(orbitScript.GetStartOrbitVelocity());
+        }
+    }
     private void SetupInitialVelocity()
     {
-
-
         OrbitScript orbitScript = GetComponent<OrbitScript>();
         if (orbitScript!=null && orbitScript.enabled)
         {
@@ -64,8 +74,6 @@ public class GravitySource : MonoBehaviour
      */
     public Vector3 GetGravitationalForceFor(GravitySource other)
     {
-
-
         Vector3 thisPos = transform.position;
         Vector3 otherPos = other.transform.position;
         Vector3 distanceVector = thisPos - otherPos;
@@ -106,8 +114,9 @@ public class GravitySource : MonoBehaviour
     public void SetStartVelocity(Vector3 _velocity)
     {
         _startVelocity = _velocity;
-        rigidBody.linearVelocity = _velocity;
         _currentVelocity = _velocity;
+        if (!frozen)
+            rigidBody.linearVelocity = _velocity;
     }
 
     public void Freeze()
@@ -126,7 +135,10 @@ public class GravitySource : MonoBehaviour
         frozen = false;
     }
 
-
+    public void SetMass(float mass)
+    {
+        this._mass= mass;
+    }
 
     private void OnDrawGizmos()
     {
@@ -160,5 +172,13 @@ public class GravitySource : MonoBehaviour
     public void OnDisable()
     {
         GravityManager.Instance.Deregister(this);
+    }
+
+
+    private void OnDrawGizmosSelected()
+    {
+        if (!showField) return;
+        float radius = Mathf.Sqrt(UniverseConstants.G * Mass / gMin);
+        Gizmos.DrawWireSphere(transform.position, radius);
     }
 }
