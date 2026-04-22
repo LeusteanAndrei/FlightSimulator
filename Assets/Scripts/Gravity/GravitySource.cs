@@ -30,14 +30,12 @@ public class GravitySource : MonoBehaviour
     {
         if (rigidBody == null)
             _rigidBody = GetComponent<Rigidbody>();
-        rigidBody.mass = _mass;
-
-
-
     }
 
     private void Start()
     {
+        rigidBody.mass = _mass;
+
         GravityManager.Instance.Register(this);
         SetupInitialVelocity();
     }
@@ -109,6 +107,10 @@ public class GravitySource : MonoBehaviour
     public void UpdateVelocity()
     {
         rigidBody.linearVelocity += (totalForce /this.Mass)*UniverseConstants.fixedTimeStep;
+        //rigidBody.AddForce(
+        //        totalForce / Mass,
+        //        ForceMode.Acceleration
+        //);
     }
 
     public void SetStartVelocity(Vector3 _velocity)

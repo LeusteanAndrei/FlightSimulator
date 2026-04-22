@@ -11,6 +11,7 @@ class SimulateBody
     public float mass;
     public Vector3 totalForce;
     public Vector3 velocity;
+    public float linearDamping;
 
     public SimulateBody(GravitySource gravitySource)
     {
@@ -18,6 +19,7 @@ class SimulateBody
         velocity = gravitySource.Velocity;
         position = gravitySource.transform.position;
         totalForce = gravitySource.totalForce;
+        linearDamping = gravitySource.rigidBody.linearDamping;
     }
 
 
@@ -108,6 +110,9 @@ public class GizmoVisualizer : MonoBehaviour
         }
         foreach ( var source in simulateBodies)
         {
+            Vector3 dampingForce = -source.mass * source.linearDamping * source.velocity;
+            source.totalForce += dampingForce;
+
             source.velocity += (source.totalForce / source.mass) * UniverseConstants.fixedTimeStep;
             source.position += source.velocity * UniverseConstants.fixedTimeStep;
         }
