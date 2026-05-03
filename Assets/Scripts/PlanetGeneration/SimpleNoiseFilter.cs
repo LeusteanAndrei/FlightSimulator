@@ -1,10 +1,10 @@
 using UnityEngine;
 
-public class NoiseFilter 
+public class SimpleNoiseFilter : INoiseFilter
 {
     Noise noise = new Noise();
-    NoiseSettings settings;
-    public NoiseFilter(NoiseSettings settings)
+    NoiseSettings.SimpleNoiseSettings settings;
+    public SimpleNoiseFilter(NoiseSettings.SimpleNoiseSettings settings)
     {
         this.settings = settings;
     }
@@ -21,7 +21,9 @@ public class NoiseFilter
             amplitude *= settings.persistance;
         }
         //     (noise.Evaluate(point * settings.roughness +settings.centre) + 1) * .5f;
-        noiseValue = Mathf.Max(0, noiseValue - settings.minValue);
+        //noiseValue = Mathf.Max(0, noiseValue - settings.minValue);
+        noiseValue = noiseValue - settings.minValue;
+
         return noiseValue * settings.strength;
     }
 }

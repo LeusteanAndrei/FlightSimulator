@@ -3,17 +3,19 @@ using UnityEngine;
 public class ShapeGenerator 
 {
     ShapeSettings settings;
-    NoiseFilter[] noiseFilters;
-    public ShapeGenerator(ShapeSettings settings)
+    INoiseFilter[] noiseFilters;
+    public MinMax elevationMinMax;
+    public void UpdateSettings(ShapeSettings settings)
     {
         this.settings = settings;
-        noiseFilters = new NoiseFilter[settings.noiseLayers.Length];
+        noiseFilters = new INoiseFilter[settings.noiseLayers.Length];
         for (int i = 0; i < noiseFilters.Length; i++)
         {
-            noiseFilters[i] = new NoiseFilter(settings.noiseLayers[i].noiseSettings);
+            noiseFilters[i] = NoiseFilterFactory.CreateNoiseFilter(settings.noiseLayers[i].noiseSettings);
         }
+        elevationMinMax = new MinMax();
     }
-    public Vector3 CalculatePointOnPlanet(Vector3 pointOnUnitSphere)
+    public float CalculateUnscaledElevation(Vector3 pointOnUnitSphere)
     {
         float firstLayerValue = 0;
         float elevation = 0;
@@ -34,7 +36,16 @@ public class ShapeGenerator
 
             }
         }
-          //noiseFilter.Evaluate(pointOnUnitSphere);
-        return pointOnUnitSphere * settings.planetRadius * (1+elevation);
+        //noiseFilter.Evaluate(pointOnUnitSphere);
+       // elevation = settings.planetRadius * (1 + elevation);
+        elevationMinMax.AddValue(elevation);
+        return elevation;
+    }
+
+    public float GetScaledElevation(float unscaledElevation)
+    {
+        float elevation = Mathf.Max(0, unscaledElevation);
+        elevation = settings.planetRadius * (1 + elevation);
+        return elevation;
     }
 }
