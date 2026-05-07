@@ -112,8 +112,8 @@ MonoBehaviour:
         m_NumColorKeys: 3
         m_NumAlphaKeys: 2
       tint: {r: 1, g: 1, b: 1, a: 0}
-      tintPercent: 0
-      startHeight: 0.51
+      tintPercent: 0.124
+      startHeight: 0.064
     noise:
       filterType: 0
       simpleNoiseSettings:
@@ -133,12 +133,12 @@ MonoBehaviour:
         baseRoughness: 1
         minValue: 0
         weightMultiplier: 0.8
-    noiseOffset: 0.3
-    noiseStrength: 0.42
-    blendAmount: 0.651
+    noiseOffset: 1.02
+    noiseStrength: 1.77
+    blendAmount: 0.54
   oceanColour:
     serializedVersion: 2
-    key0: {r: 0, g: 0.07460976, b: 0.38679248, a: 1}
+    key0: {r: 0, g: 0.07450981, b: 0.38823533, a: 1}
     key1: {r: 0.504717, g: 0.65691465, b: 1, a: 1}
     key2: {r: 0.46980688, g: 0.9669811, b: 0.94697315, a: 0}
     key3: {r: 0.71488965, g: 0.89072174, b: 0.8915094, a: 0}

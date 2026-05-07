@@ -41,6 +41,10 @@ public class GravitySource : MonoBehaviour
     }
 
 
+    public void SetVelocity(Vector3 vel)
+    {
+        _currentVelocity = vel;
+    }
     private void Update()
     {
         if(!frozen)
@@ -53,7 +57,7 @@ public class GravitySource : MonoBehaviour
         OrbitScript orbitScript = GetComponent<OrbitScript>();
         if (orbitScript != null && orbitScript.enabled)
         {
-            this.SetStartVelocity(orbitScript.GetStartOrbitVelocity());
+            //this.SetStartVelocity(orbitScript.GetStartOrbitVelocity());
         }
     }
     private void SetupInitialVelocity()
@@ -61,7 +65,7 @@ public class GravitySource : MonoBehaviour
         OrbitScript orbitScript = GetComponent<OrbitScript>();
         if (orbitScript!=null && orbitScript.enabled)
         {
-            this.SetStartVelocity(orbitScript.GetStartOrbitVelocity());
+            //this.SetStartVelocity(orbitScript.GetStartOrbitVelocity());
         }
         else
             this.SetStartVelocity(_startVelocity);
@@ -157,19 +161,7 @@ public class GravitySource : MonoBehaviour
     }
 
 
-    void DrawArrowHead(Vector3 position, Vector3 direction)
-    {
-        float headAngle = 20f; float headLength = 0.2f;
-        // Calculate rotation for arrowhead lines
-        Quaternion rightRotation = Quaternion.Euler(0, 0, headAngle);
-        Quaternion leftRotation = Quaternion.Euler(0, 0, -headAngle);
-
-        Vector3 right = rightRotation * direction * headLength;
-        Vector3 left = leftRotation * direction * headLength;
-
-        Gizmos.DrawLine(position, position + right);
-        Gizmos.DrawLine(position, position + left);
-    }
+    
 
     public void OnDisable()
     {

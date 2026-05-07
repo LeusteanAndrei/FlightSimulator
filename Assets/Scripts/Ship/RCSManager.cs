@@ -1,4 +1,5 @@
 using UnityEngine;
+using static UnityEngine.LightAnchor;
 
 public class RCSManager : MonoBehaviour
 {
@@ -57,9 +58,16 @@ public class RCSManager : MonoBehaviour
     [Header("Others")]
     [SerializeField] Rigidbody shipRigidBody;
     [SerializeField] Vector3 LookTowards;
+    [SerializeField, Range(-180f, 180f)]
+    public float currentRollAngle = 0.0f;
+    [SerializeField, Range(-180f, 180f)]
+    public float targetAngle= 0.0f;
+    Vector3 UpDirection = Vector3.zero;
     [SerializeField] bool lookTowardVector;
+    [SerializeField] bool rollTowards;
     [SerializeField] bool unityRotate;
     [SerializeField] float threshold = 0.1f;
+    [SerializeField] float angleThreshold = 0.1f;
 
     GravitationalOrientation gravitationalOrientation;
     void Start()
@@ -67,6 +75,7 @@ public class RCSManager : MonoBehaviour
         gravitationalOrientation = GetComponent<GravitationalOrientation>();
         if (shipRigidBody == null)
             GameInstance.Instance.SpaceShip().RigidBody();
+        UpDirection = GetUpDirectioneFromRollAngle(CurrentRollAngle());
     }
 
     public void xAxisStop()
@@ -94,35 +103,95 @@ public class RCSManager : MonoBehaviour
 
     public void RotateRight()
     {
+        StopRotateLeft();
         yRightBackTruster.Fire();
         yLeftFrontTruster.Fire();
     }
     public void RotateLeft()
     {
+        StopRotateRight();
         yLeftBackTruster.Fire();
         yRightFrontTruster.Fire();
     }
 
     public void RotateForward()
     {
+        StopRotateBackwards();
         xFrontUpThruster.Fire();
         xBackDownThruster.Fire();
     }
     public void RotateBackwards()
     {
+        StopRotateForward();
         xFrontDownThruster.Fire();
         xBackUpThruster.Fire();
     }
     public void RotateSidewaysClockwise()
     {
+        StopRotateSidewaysCounterClockwise();
         zRightDownThruster.Fire();
         zLeftUpThruster.Fire();
     }
 
     public void RotateSidewaysCounterClockwise()
     {
+        StopRotateSidewaysClockwise();
         zLeftDownThruster.Fire();
         zRightUpThruster.Fire();
+    }
+
+    public void StopRotateRight()
+    {
+        yRightBackTruster.Stop();
+        yLeftFrontTruster.Stop();
+    }
+
+    public void StopRotateLeft()
+    {
+        yLeftBackTruster.Stop();
+        yRightFrontTruster.Stop();
+    }
+
+    public void StopRotateForward()
+    {
+        xFrontUpThruster.Stop();
+        xBackDownThruster.Stop();
+    }
+
+    public void StopRotateBackwards()
+    {
+        xFrontDownThruster.Stop();
+        xBackUpThruster.Stop();
+    }
+
+    public void StopRotateSidewaysClockwise()
+    {
+        zRightDownThruster.Stop();
+        zLeftUpThruster.Stop();
+    }
+
+    public void StopRotateSidewaysCounterClockwise()
+    {
+        zLeftDownThruster.Stop();
+        zRightUpThruster.Stop();
+    }
+
+
+    float CurrentRollAngle()
+    {
+        Vector3 forward = gravitationalOrientation.Forward();
+        Vector3 currentUp = gravitationalOrientation.Up();
+        Vector3 referenceUp = Vector3.up;
+
+        if (Mathf.Abs(Vector3.Dot(forward, referenceUp)) > 0.99f)
+        {
+            referenceUp = Vector3.right;
+        }
+
+        referenceUp = Vector3.ProjectOnPlane(referenceUp, forward).normalized;
+        currentUp = Vector3.ProjectOnPlane(currentUp, forward).normalized;
+
+        return Vector3.SignedAngle(referenceUp, currentUp, forward);
     }
 
     public void StopAll()
@@ -137,8 +206,8 @@ public class RCSManager : MonoBehaviour
         if (newOrientation.sqrMagnitude < 0.0001f)
             return;
 
-        Vector3 target = newOrientation.normalized;
 
+        Vector3 target = newOrientation.normalized;
         Vector3 forward = transform.forward;
 
         float currentY = Vector3.Dot(forward, gravitationalOrientation.Up());
@@ -161,25 +230,51 @@ public class RCSManager : MonoBehaviour
         else
             yAxisStop();
 
-        //float currentZ = Vector3.Dot(forward, Vector3.forward);
-        //float targetZ = Vector3.Dot(target, Vector3.forward);
-        //error = currentZ - targetZ;
+    }
 
-        //if (error > threshold)
-        //    RotateSidewaysClockwise();
-        //else if (error < -threshold)
-        //    RotateSidewaysCounterClockwise();
-        //else
-        //    zAxisStop();
+    public void SetRoll(float angle)
+    {
+        targetAngle = angle;
+        float angleError = currentRollAngle - targetAngle;
+        if (angleError > angleThreshold)
+        {
+            RotateSidewaysCounterClockwise();
+        }
+        else if (angleError < -angleThreshold)
+        {
+            RotateSidewaysClockwise();
+        }
+        else
+            zAxisStop();
     }
 
     void Update()
     {
     }
+
+
+    Vector3 GetUpDirectioneFromRollAngle(float rollAngle)
+    {
+        Vector3 baseUp = Vector3.up;
+
+        if (Vector3.Dot(baseUp, LookTowards.normalized) > 0.99f)
+            baseUp = Vector3.right;
+
+        Vector3 perpendicular = Vector3.ProjectOnPlane(baseUp, LookTowards).normalized;
+        return Quaternion.AngleAxis(rollAngle, LookTowards) * perpendicular;
+    }
+
     private void FixedUpdate()
     {
+        currentRollAngle = CurrentRollAngle();
         if (lookTowardVector)
+        {
             RotateTowardsVector(LookTowards);
+        }
+        if(rollTowards)
+        {
+            SetRoll(targetAngle);
+        }
         //else if(!UseKeyboard)
             //StopAll();
         if (unityRotate)
@@ -192,12 +287,17 @@ public class RCSManager : MonoBehaviour
 
     private void OnDrawGizmos()
     {
-        Gizmos.color = Color.red;
-        Gizmos.DrawRay(shipRigidBody.position, LookTowards);
-        Vector3 Threshold = new Vector3(threshold, threshold, threshold);
+
+        Gizmos.color = Color.pink;
+        Gizmos.DrawRay(shipRigidBody.position, GetUpDirectioneFromRollAngle(targetAngle));
         Gizmos.color = Color.yellow;
-        Gizmos.DrawRay(shipRigidBody.position, LookTowards - Threshold);
-        Gizmos.DrawRay(shipRigidBody.position, LookTowards +Threshold);
+        Gizmos.DrawRay(shipRigidBody.position, GetUpDirectioneFromRollAngle(currentRollAngle));
+        Gizmos.color = Color.purple;
+        Gizmos.DrawRay(shipRigidBody.position, LookTowards);
+        //Vector3 Threshold = new Vector3(threshold, threshold, threshold);
+        //Gizmos.color = Color.yellow;
+        //Gizmos.DrawRay(shipRigidBody.position, LookTowards - Threshold);
+        //Gizmos.DrawRay(shipRigidBody.position, LookTowards +Threshold);
 
     }
 }

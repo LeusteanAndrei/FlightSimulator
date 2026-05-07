@@ -5,7 +5,8 @@ public class Engine : MonoBehaviour
 {
 
     public float strength = 5f;
-    public bool useEngine = false;
+    public float maxStrength = 10f;
+    public bool useEngine = true;
     [SerializeField] KeyCode key;
     [SerializeField] private Vector3 orientation;
     [SerializeField] private Vector3 engineForce;
@@ -14,8 +15,9 @@ public class Engine : MonoBehaviour
     [SerializeField] private Rigidbody rb = null;
 
     [SerializeField] private ParticleSystem engineEffect;
+    [SerializeField] bool useKeyboard = false;
 
-    bool activated = false;
+    [SerializeField] bool activated = false;
 
 
     void Start()
@@ -37,7 +39,12 @@ public class Engine : MonoBehaviour
     }
 
 
-    Vector3 GetEngineForward()
+    public void SetForce(float force)
+    {
+        this.strength = Mathf.Clamp(force, 0, maxStrength);
+    }
+
+    public Vector3 GetEngineForward()
     {
         return orientation.z * gravOrientation.Forward() + orientation.y * gravOrientation.Up() + orientation.x * gravOrientation.Right();  
     }
@@ -47,7 +54,7 @@ public class Engine : MonoBehaviour
         if (!IsActive()) return;
         Vector3 engineForward = GetEngineForward();
         engineForce = engineForward * strength ;
-        rb.AddForce( engineForce , ForceMode.Force);
+        rb.AddForce( engineForce );
     }
     public void Activate()
     {
@@ -65,11 +72,13 @@ public class Engine : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetKey(key))
-            Activate();
-        else
-            Deactivate();
-
+        if (useKeyboard == true)
+        {
+            if (Input.GetKey(key))
+                Activate();
+            else
+                Deactivate();
+        }
         if (engineEffect != null)
         {
             if (IsActive() && !engineEffect.isPlaying)

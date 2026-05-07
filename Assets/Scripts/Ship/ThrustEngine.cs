@@ -4,7 +4,7 @@ public class ThrustEngine : MonoBehaviour
 {
 
     [SerializeField] Rigidbody rigidbody;
-    [SerializeField] float force = .01f;
+    [SerializeField] public float force = .01f;
     [SerializeField] KeyCode key;
     [SerializeField] bool alwaysShow = false;
     [Header("Particle system")]

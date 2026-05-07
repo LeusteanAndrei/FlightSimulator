@@ -12,62 +12,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c1d9d480fb34dac41b6078dfbf2dfbc6, type: 3}
   m_Name: Shape
   m_EditorClassIdentifier: Assembly-CSharp::ShapeSettings
-  planetRadius: 2.72
+  planetRadius: 2.41
   noiseLayers:
   - enabled: 1
-    useFirstlayerAsMask: 0
-    noiseSettings:
-      filterType: 0
-      simpleNoiseSettings:
-        strength: 0.2
-        roughness: 4
-        centre: {x: 0, y: 0, z: 0}
-        numLayers: 4
-        persistance: 0.5
-        baseRoughness: 1.2
-        minValue: 1.3
-      rigidNoiseSettings:
-        strength: 1
-        roughness: 2
-        centre: {x: 0, y: 0, z: 0}
-        numLayers: 1
-        persistance: 0.5
-        baseRoughness: 1
-        minValue: 0
-        weightMultiplier: 0.8
-  - enabled: 1
     useFirstlayerAsMask: 1
     noiseSettings:
       filterType: 0
       simpleNoiseSettings:
-        strength: 1
-        roughness: 2
+        strength: 0.23
+        roughness: 4.17
         centre: {x: 0, y: 0, z: 0}
-        numLayers: 1
-        persistance: 0.2
-        baseRoughness: 1
-        minValue: 0
-      rigidNoiseSettings:
-        strength: 1
-        roughness: 2
-        centre: {x: 0, y: 0, z: 0}
-        numLayers: 1
-        persistance: 0.5
-        baseRoughness: 1
-        minValue: 0
-        weightMultiplier: 0.8
-  - enabled: 1
-    useFirstlayerAsMask: 1
-    noiseSettings:
-      filterType: 1
-      simpleNoiseSettings:
-        strength: 1
-        roughness: 2
-        centre: {x: 0, y: 0, z: 0}
-        numLayers: 1
-        persistance: 0.5
-        baseRoughness: 1
-        minValue: 0
+        numLayers: 6
+        persistance: 0.59
+        baseRoughness: 2.67
+        minValue: 1.39
       rigidNoiseSettings:
         strength: 1
         roughness: 2

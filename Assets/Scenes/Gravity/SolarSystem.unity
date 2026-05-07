@@ -788,6 +788,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::OrbitScript
   parentPlanet: {fileID: 691685149}
+  targetPlanet: {fileID: 0}
+  orientation: {fileID: 0}
+  startOrbit: 0
+  maintainRoll: 1
+  mantainHeight: 0
+  enterOrbit: 0
+  orbitHeight: 10
+  pGain: 2
+  dGain: 1
+  threshold: 0.5
+  upEngine: {fileID: 0}
+  forwardEngine: {fileID: 0}
+  rcs: {fileID: 0}
+  thisPlanet: {fileID: 0}
 --- !u!1 &682061478
 GameObject:
   m_ObjectHideFlags: 0
@@ -1307,7 +1321,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GizmoVisualizer
   stepCount: 10000
-  realTime: 0
+  realTime: 1
   useAllSources: 1
   sources: []
 --- !u!114 &776942353
