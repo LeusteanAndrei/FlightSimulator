@@ -206,7 +206,7 @@ public class RCSManager : MonoBehaviour
         if (newOrientation.sqrMagnitude < 0.0001f)
             return;
 
-
+        LookTowards = newOrientation.normalized;
         Vector3 target = newOrientation.normalized;
         Vector3 forward = transform.forward;
 
@@ -250,6 +250,8 @@ public class RCSManager : MonoBehaviour
 
     void Update()
     {
+        currentRollAngle = CurrentRollAngle();
+
     }
 
 
@@ -266,7 +268,6 @@ public class RCSManager : MonoBehaviour
 
     private void FixedUpdate()
     {
-        currentRollAngle = CurrentRollAngle();
         if (lookTowardVector)
         {
             RotateTowardsVector(LookTowards);

@@ -77,9 +77,9 @@ public class OrbitScript : MonoBehaviour
         }
         else
         {
-            upEngine.Deactivate();
-            forwardEngine.Deactivate();
-            rcs.StopAll();
+            //upEngine.Deactivate();
+            //forwardEngine.Deactivate();
+            //rcs.StopAll();
         }
     }
 
@@ -119,6 +119,9 @@ public class OrbitScript : MonoBehaviour
         startOrbit = false;
         maintainRoll = false;
         enterOrbit = false;
+        upEngine.Deactivate();
+        forwardEngine.Deactivate();
+        rcs.StopAll();
     }
 
     public Vector3 GetNecessaryVelocity()
