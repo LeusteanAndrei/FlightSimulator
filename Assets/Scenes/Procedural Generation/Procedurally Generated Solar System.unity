@@ -159,9 +159,9 @@ MonoBehaviour:
   seed: 0
   planetCountRange: {x: 2, y: 7}
   planetMassPercentRange: {x: 0.00000016, y: 0.00096}
-  planetRadiusExponent: 0.01
+  planetRadiusExponent: 0.1
   planetScaleAtOneEarthMass: 1
-  orbitDistanceMultiplier: 20
+  orbitDistanceMultiplier: 60
   orbitDistanceMassExponent: 0.12
   orbitDistanceStepMultiplier: 1.8
   orbitTiltDegrees: 8
