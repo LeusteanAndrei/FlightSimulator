@@ -145,6 +145,63 @@ public class OrbitScript : MonoBehaviour
 
     public GravitySource Planet()
     { return thisPlanet; }
+
+    public void ConfigurePassiveOrbit(GravitySource centerBody, Vector3 orbitNormal, bool clockwise)
+    {
+        if (centerBody == null)
+        {
+            return;
+        }
+
+        if (thisPlanet == null)
+        {
+            thisPlanet = GetComponent<GravitySource>();
+        }
+
+        parentPlanet = centerBody;
+        targetPlanet = centerBody;
+        startOrbit = false;
+        maintainRoll = false;
+        mantainHeight = false;
+        enterOrbit = false;
+
+        Vector3 distanceVector = thisPlanet.transform.position - centerBody.transform.position;
+        float distance = Mathf.Max(0.001f, distanceVector.magnitude);
+
+        Vector3 normal = orbitNormal;
+        if (normal.sqrMagnitude < 0.0001f)
+        {
+            normal = Vector3.up;
+        }
+        normal.Normalize();
+
+        Vector3 velocityDirection = Vector3.Cross(normal, distanceVector).normalized;
+        if (velocityDirection.sqrMagnitude < 0.0001f)
+        {
+            velocityDirection = Vector3.Cross(Vector3.up, distanceVector).normalized;
+            if (velocityDirection.sqrMagnitude < 0.0001f)
+            {
+                velocityDirection = Vector3.Cross(Vector3.right, distanceVector).normalized;
+            }
+        }
+
+        if (!clockwise)
+        {
+            velocityDirection *= -1f;
+        }
+
+        float speed = Mathf.Sqrt(UniverseConstants.gravitationalConstant * centerBody.Mass / distance);
+        Vector3 velocity = velocityDirection * speed;
+
+        Vector3 centerVelocity = Vector3.zero;
+        if (centerBody != null && centerBody.rigidBody != null)
+        {
+            centerVelocity = centerBody.rigidBody.linearVelocity;
+        }
+
+        velocity += centerVelocity;
+        thisPlanet.SetStartVelocity(velocity);
+    }
     
     public Vector3 GetStartOrbitVelocity()
     {

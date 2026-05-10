@@ -20,8 +20,23 @@ public class PlanetScript : MonoBehaviour
     ShapeGenerator shapeGenerator = new ShapeGenerator();
     ColourGenerator colourGenerator = new ColourGenerator();
     public bool autoUpdate = true;
+
+    private bool IsPrefabAsset()
+    {
+#if UNITY_EDITOR
+        return UnityEditor.PrefabUtility.IsPartOfPrefabAsset(gameObject);
+#else
+        return false;
+#endif
+    }
+
     private void OnValidate()
     {
+        if (!Application.isPlaying && IsPrefabAsset())
+        {
+            return;
+        }
+
         //Init();
         //GenerateMesh();
         if (shapeSettings == null || colourSettings == null || defaultMaterial == null)
@@ -31,6 +46,11 @@ public class PlanetScript : MonoBehaviour
     }
     void Init()
     {
+        if (!Application.isPlaying && IsPrefabAsset())
+        {
+            return;
+        }
+
         //shapeGenerator = new ShapeGenerator(shapeSettings);
         //colourGenerator = new ColourGenerator(colourSettings);
         shapeGenerator.UpdateSettings(shapeSettings);
@@ -47,15 +67,42 @@ public class PlanetScript : MonoBehaviour
             if (meshFilters[i] == null)
             {
                 GameObject meshObj = new GameObject("mesh");
-                meshObj.transform.parent = transform;
+                meshObj.transform.SetParent(transform, false);
+                meshObj.transform.localPosition = Vector3.zero;
+                meshObj.transform.localRotation = Quaternion.identity;
+                meshObj.transform.localScale = Vector3.one;
 
                 meshObj.AddComponent<MeshRenderer>();
                     //.sharedMaterial = defaultMaterial;
                 meshFilters[i] = meshObj.AddComponent<MeshFilter>();
                 meshFilters[i].sharedMesh = new Mesh();
+
+                MeshCollider meshCollider = meshObj.AddComponent<MeshCollider>();
+                meshCollider.sharedMesh = meshFilters[i].sharedMesh;
+                meshCollider.convex = true;
             }
+
+            Mesh runtimeFaceMesh = new Mesh();
+            runtimeFaceMesh.name = $"PlanetFace_{i}";
+            meshFilters[i].sharedMesh = runtimeFaceMesh;
+
+            MeshCollider existingCollider = meshFilters[i].GetComponent<MeshCollider>();
+            if (existingCollider == null)
+            {
+                existingCollider = meshFilters[i].gameObject.AddComponent<MeshCollider>();
+            }
+
+            Transform faceTransform = meshFilters[i].transform;
+            faceTransform.SetParent(transform, false);
+            faceTransform.localPosition = Vector3.zero;
+            faceTransform.localRotation = Quaternion.identity;
+            faceTransform.localScale = Vector3.one;
+
+            existingCollider.convex = true;
+            existingCollider.sharedMesh = runtimeFaceMesh;
+
             meshFilters[i].GetComponent<MeshRenderer>().sharedMaterial = colourSettings.planetMaterial;
-            terrainFaces[i]=new TerrainFace(shapeGenerator, meshFilters[i].sharedMesh, resolution, directions[i]);
+            terrainFaces[i]=new TerrainFace(shapeGenerator, runtimeFaceMesh, resolution, directions[i]);
             bool renderFace = faceRenderMask == FaceRenderMask.All || (int)faceRenderMask - 1 == i;
             meshFilters[i].gameObject.SetActive(renderFace);
         }
@@ -80,6 +127,11 @@ public class PlanetScript : MonoBehaviour
     }
     public void GeneratePlanet()
     {
+        if (!Application.isPlaying && IsPrefabAsset())
+        {
+            return;
+        }
+
         Init();
         GenerateMesh();
         GenerateColours();
@@ -95,6 +147,15 @@ public class PlanetScript : MonoBehaviour
             if (meshFilters[i].gameObject.activeSelf)
             {
                 terrainFaces[i].ConstructMesh();
+
+                MeshCollider meshCollider = meshFilters[i].GetComponent<MeshCollider>();
+                if (meshCollider != null)
+                {
+                    // Reassign to force Unity to rebuild collider from the latest mesh vertices.
+                    meshCollider.convex = true;
+                    meshCollider.sharedMesh = null;
+                    meshCollider.sharedMesh = meshFilters[i].sharedMesh;
+                }
             }
         }
 
@@ -102,6 +163,11 @@ public class PlanetScript : MonoBehaviour
     }
     public void OnColourSettingsUpdated()
     {
+        if (!Application.isPlaying && IsPrefabAsset())
+        {
+            return;
+        }
+
         if (autoUpdate)
         {
         Init();
@@ -111,6 +177,11 @@ public class PlanetScript : MonoBehaviour
     }
     public void OnShapeSettingsUpdated()
     {
+        if (!Application.isPlaying && IsPrefabAsset())
+        {
+            return;
+        }
+
         if (autoUpdate)
         {
         Init();

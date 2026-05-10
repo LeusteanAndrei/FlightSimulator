@@ -30,6 +30,11 @@ public class GravitySource : MonoBehaviour
     {
         if (rigidBody == null)
             _rigidBody = GetComponent<Rigidbody>();
+
+        if (rigidBody != null)
+        {
+            rigidBody.useGravity = false;
+        }
     }
 
     private void Start()
@@ -144,6 +149,7 @@ public class GravitySource : MonoBehaviour
     public void SetMass(float mass)
     {
         this._mass= mass;
+
     }
 
     private void OnDrawGizmos()

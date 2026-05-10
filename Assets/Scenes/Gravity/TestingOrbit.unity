@@ -421,6 +421,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::OrbitScript
   parentPlanet: {fileID: 1426079768}
+  targetPlanet: {fileID: 0}
+  orientation: {fileID: 0}
+  startOrbit: 0
+  maintainRoll: 1
+  mantainHeight: 0
+  enterOrbit: 0
+  orbitHeight: 10
+  pGain: 2
+  dGain: 1
+  threshold: 0.5
+  upEngine: {fileID: 0}
+  forwardEngine: {fileID: 0}
+  rcs: {fileID: 0}
+  thisPlanet: {fileID: 0}
 --- !u!135 &572778502
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -545,7 +559,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0d64e062fc7a3e548b9a8fe7037540ef, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GravityManager
-  runSimulation: 0
+  runSimulation: 1
 --- !u!4 &860795582
 Transform:
   m_ObjectHideFlags: 0
@@ -677,6 +691,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::OrbitScript
   parentPlanet: {fileID: 1456439343}
+  targetPlanet: {fileID: 0}
+  orientation: {fileID: 0}
+  startOrbit: 0
+  maintainRoll: 1
+  mantainHeight: 0
+  enterOrbit: 0
+  orbitHeight: 10
+  pGain: 2
+  dGain: 1
+  threshold: 0.5
+  upEngine: {fileID: 0}
+  forwardEngine: {fileID: 0}
+  rcs: {fileID: 0}
+  thisPlanet: {fileID: 0}
 --- !u!135 &1426079770
 SphereCollider:
   m_ObjectHideFlags: 0
