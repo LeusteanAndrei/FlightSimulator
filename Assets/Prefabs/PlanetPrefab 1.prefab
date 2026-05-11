@@ -135,7 +135,7 @@ MonoBehaviour:
   massRange: {x: 0, y: 0}
   scaleAtOneEarthMass: 1
   massToScaleExponent: 1
-  visualScaleMultiplier: 100
+  visualScaleMultiplier: 50
   generateMoons: 1
   moonPrefab: {fileID: 2178124721942585179, guid: d24674739486c8e49a4bc1231af08071, type: 3}
   moonCountRange: {x: 0, y: 3}

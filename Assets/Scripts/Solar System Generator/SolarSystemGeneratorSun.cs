@@ -5,30 +5,26 @@ using UnityEngine;
 [DisallowMultipleComponent]
 public class SolarSystemGeneratorSun : MonoBehaviour
 {
-    [Header("Setup")]
     [SerializeField] private GameObject planetPrefab;
     [SerializeField] private bool generateOnAwake = true;
     [SerializeField] private bool useRandomSeed = true;
     [SerializeField] private int seed = 0;
 
-    [Header("Planet Count")]
     [SerializeField] private Vector2Int planetCountRange = new Vector2Int(2, 7);
 
-    [Header("Planet Mass")]
     [SerializeField] private Vector2 planetMassPercentRange = new Vector2(0.001f, 0.1f);
     [SerializeField] private float planetRadiusExponent = 0.3333333f;
     [SerializeField] private float planetScaleAtOneEarthMass = 1f;
 
-    [Header("Orbit Layout")]
     [SerializeField] private float orbitDistanceMultiplier = 8f;
     [SerializeField] private float orbitDistanceMassExponent = 0.12f;
     [SerializeField] private float orbitDistanceStepMultiplier = 1.8f;
     [SerializeField] private float orbitTiltDegrees = 8f;
 
-    [Header("Spawn")]
     [SerializeField] private Transform systemRoot;
 
     private readonly List<GameObject> spawnedPlanets = new List<GameObject>();
+    private SolarSystemPosition sunPosition;
 
     private void Awake()
     {
@@ -47,6 +43,16 @@ public class SolarSystemGeneratorSun : MonoBehaviour
         }
 
         DestroySpawnedPlanets();
+        
+        if (sunPosition == null)
+        {
+            sunPosition = GetComponent<SolarSystemPosition>();
+            if (sunPosition == null)
+            {
+                sunPosition = gameObject.AddComponent<SolarSystemPosition>();
+            }
+        }
+        sunPosition.ResetSystemRadius();
 
         int actualSeed = useRandomSeed ? UnityEngine.Random.Range(int.MinValue, int.MaxValue) : seed;
         System.Random random = new System.Random(actualSeed);
@@ -93,6 +99,8 @@ public class SolarSystemGeneratorSun : MonoBehaviour
             {
                 generator.RefreshMoonOrbits();
             }
+
+            sunPosition.CalculateMinDistance(orbitDistance, planetRadius);
 
             spawnedPlanets.Add(planetObj);
             previousOrbitDistance = orbitDistance;

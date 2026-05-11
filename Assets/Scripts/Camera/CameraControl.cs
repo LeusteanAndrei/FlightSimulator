@@ -28,7 +28,7 @@ public class CameraControl : MonoBehaviour
     void Update()
     {
         float scroll = Input.GetAxis("Mouse ScrollWheel");
-        Debug.Log(scroll);
+        //Debug.Log(scroll);
         if (scroll == 0)
         {
             rollLeft = false;

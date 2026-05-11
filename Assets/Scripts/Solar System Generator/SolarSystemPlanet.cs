@@ -9,18 +9,15 @@ public class SolarSystemPlanet : MonoBehaviour
 {
     private static int moonSpawnContext;
 
-    [Header("Generation")]
     [SerializeField] private bool generateOnAwake = true;
     [SerializeField] private bool useRandomSeed = true;
     [SerializeField] private int seed = 0;
 
-    [Header("Physical Ranges")]
     [SerializeField] private Vector2 massRange = new Vector2(0.05f, 500f);
     [SerializeField] private float scaleAtOneEarthMass = 1f;
     [SerializeField] private float massToScaleExponent = 0.3333333f;
     [SerializeField] private float visualScaleMultiplier = 1f;
 
-    [Header("Moon Generation")]
     [SerializeField] private bool generateMoons = true;
     [SerializeField] private GameObject moonPrefab;
     [SerializeField] private Vector2Int moonCountRange = new Vector2Int(0, 3);
@@ -30,7 +27,6 @@ public class SolarSystemPlanet : MonoBehaviour
     [SerializeField] private float moonDistanceStepMultiplier = 0.9f;
     [SerializeField] private float moonOrbitTiltDegrees = 10f;
 
-    [Header("Surface Ranges")]
     [SerializeField] private Vector2 noiseStrengthMultiplierRange = new Vector2(0.6f, 2f);
     [SerializeField] private Vector2 noiseRoughnessMultiplierRange = new Vector2(0.75f, 1.5f);
     [SerializeField] private Vector2 biomeNoiseStrengthRange = new Vector2(0.25f, 2f);
@@ -202,7 +198,6 @@ public class SolarSystemPlanet : MonoBehaviour
             float spacingFactor = moonOrbitDistanceMultiplier + (i * moonDistanceStepMultiplier);
             float orbitDistance = minDistance + (planetRadius * spacingFactor * massDistanceScale);
 
-            // Clamp moon orbit distance to within planet's Hill sphere so moons remain bound to the planet
             float hillLimit = float.MaxValue;
             if (GravityManager.Instance != null)
             {
@@ -221,7 +216,7 @@ public class SolarSystemPlanet : MonoBehaviour
                     float M = Mathf.Max(1e-9f, dominant.Mass);
                     float m = Mathf.Max(1e-9f, planetMass);
                     float hillRadius = a * Mathf.Pow(m / (3f * M), 1f / 3f);
-                    hillLimit = hillRadius * 0.4f; // conservative fraction of Hill sphere
+                    hillLimit = hillRadius * 0.4f;
                 }
             }
 
