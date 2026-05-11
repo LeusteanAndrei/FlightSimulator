@@ -212,7 +212,6 @@ public class SolarSystemPlanet : MonoBehaviour
                 if (dominant != null)
                 {
                     float a = Vector3.Distance(transform.position, dominant.transform.position);
-                    // avoid division by zero
                     float M = Mathf.Max(1e-9f, dominant.Mass);
                     float m = Mathf.Max(1e-9f, planetMass);
                     float hillRadius = a * Mathf.Pow(m / (3f * M), 1f / 3f);

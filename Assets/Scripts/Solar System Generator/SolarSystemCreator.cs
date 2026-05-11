@@ -7,10 +7,10 @@ public class SolarSystemCreator : MonoBehaviour
     public Transform playerShuttle;
     public GameObject solarSystemPrefab;
 
-    [SerializeField] private float maxDistanceFromClosestSystem = 500f; // If player gets this far from closest system, spawn a new one
-    [SerializeField] private float spawnBuffer = 50f; // Extra distance to add between systems to ensure no overlap
-    [SerializeField] private float systemHeightOffset = 0f; // Y offset to keep all systems at same height
-    [SerializeField] private float spawnCooldown = 5f; // Seconds to wait after spawning before another spawn
+    [SerializeField] private float maxDistanceFromClosestSystem = 500f;
+    [SerializeField] private float spawnBuffer = 50f;
+    [SerializeField] private float systemHeightOffset = 0f;
+    [SerializeField] private float spawnCooldown = 5f;
     
     private Vector3 playerLastPosition;
     private float spawnCheckTimer = 0f;
