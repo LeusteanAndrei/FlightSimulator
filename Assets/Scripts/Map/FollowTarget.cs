@@ -32,6 +32,9 @@ public class FollowTarget : MonoBehaviour
     // When panning, offset is applied on top
     private bool isPanning;
 
+    // Store the currently outlined object
+    private Outline currentOutline;
+
     void Start()
     {
         cam = GetComponent<Camera>();
@@ -52,6 +55,7 @@ public class FollowTarget : MonoBehaviour
 
         HandleZoom();
         HandlePan();
+        HandleHoverOutline();
 
         // Keep original follow logic
         Vector3 pos = target.position + panOffset;
@@ -78,7 +82,6 @@ public class FollowTarget : MonoBehaviour
         if (Mathf.Abs(scroll) > 0.01f)
         {
             cam.orthographicSize -= scroll * zoomSpeed * Time.unscaledDeltaTime;
-            float beforeClamp = cam.orthographicSize;
             cam.orthographicSize = Mathf.Clamp(cam.orthographicSize, minZoom, maxZoom);
         }
     }
@@ -126,6 +129,89 @@ public class FollowTarget : MonoBehaviour
         panOffset += new Vector3(delta.x, 0f, delta.z) * panSpeed;
 
         lastMousePosition = currentMousePosition;
+    }
+
+    void HandleHoverOutline()
+    {
+        // Disable outline if not hovering minimap
+        if (!IsPointerOverMinimapUI())
+        {
+            ClearCurrentOutline();
+            return;
+        }
+
+        Canvas canvas = minimapUI.canvas;
+
+        Camera uiCamera =
+            canvas != null && canvas.renderMode != RenderMode.ScreenSpaceOverlay
+            ? canvas.worldCamera
+            : null;
+
+        Vector2 mousePosition = Mouse.current.position.ReadValue();
+
+        Vector2 localMousePos;
+
+        if (!RectTransformUtility.ScreenPointToLocalPointInRectangle(
+            minimapUI.rectTransform,
+            mousePosition,
+            uiCamera,
+            out localMousePos))
+        {
+            ClearCurrentOutline();
+            return;
+        }
+
+        Rect rect = minimapUI.rectTransform.rect;
+
+        float normalizedX = (localMousePos.x - rect.x) / rect.width;
+        float normalizedY = (localMousePos.y - rect.y) / rect.height;
+
+        Ray ray = cam.ViewportPointToRay(new Vector3(normalizedX, normalizedY, 0f));
+
+        RaycastHit hit;
+
+        if (Physics.Raycast(ray, out hit, 100000f))
+        {
+            Transform hoveredObject = hit.collider.transform;
+
+            if (hoveredObject.parent != null)
+            {
+                hoveredObject = hoveredObject.parent;
+            }
+
+            // Try to get any component named "Outline"
+            Outline outline =
+                hoveredObject.GetComponent<Outline>();
+
+            // If same outline already active, do nothing
+            if (outline == currentOutline)
+            {
+                return;
+            }
+
+            // Disable previous outline
+            ClearCurrentOutline();
+
+            // Enable new outline if found
+            if (outline != null)
+            {
+                outline.enabled = true;
+                currentOutline = outline;
+            }
+        }
+        else
+        {
+            ClearCurrentOutline();
+        }
+    }
+
+    void ClearCurrentOutline()
+    {
+        if (currentOutline != null)
+        {
+            currentOutline.enabled = false;
+            currentOutline = null;
+        }
     }
 
     bool IsPointerOverMinimapUI()

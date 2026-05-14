@@ -13,7 +13,7 @@ Shader "Custom/Outline Fill" {
     [Enum(UnityEngine.Rendering.CompareFunction)] _ZTest("ZTest", Float) = 0
 
     _OutlineColor("Outline Color", Color) = (1, 1, 1, 1)
-    _OutlineWidth("Outline Width", Range(0, 10)) = 2
+    _OutlineWidth("Outline Width", Range(0, 100)) = 2
   }
 
   SubShader {
@@ -77,8 +77,22 @@ Shader "Custom/Outline Fill" {
         // Transform to view space
         float3 viewNormal = normalize(mul((float3x3)UNITY_MATRIX_V, worldNormal));
 
-        // Apply offset
-        output.position = UnityViewToClipPos(viewPosition + viewNormal * -viewPosition.z * _OutlineWidth / 1000.0);
+        float scaleFactor;
+
+        if (unity_OrthoParams.w > 0.5)
+        {
+            // Orthographic camera
+            scaleFactor = _OutlineWidth * 0.2;
+        }
+        else
+        {
+            // Perspective camera
+            scaleFactor = -viewPosition.z * _OutlineWidth / 1000.0;
+        }
+
+        output.position = UnityViewToClipPos(
+            viewPosition + viewNormal * scaleFactor
+        );
 
         output.color = _OutlineColor;
 
