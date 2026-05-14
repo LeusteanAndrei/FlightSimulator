@@ -43,7 +43,7 @@ public class SolarSystemGeneratorSun : MonoBehaviour
         }
 
         DestroySpawnedPlanets();
-        
+
         if (sunPosition == null)
         {
             sunPosition = GetComponent<SolarSystemPosition>();

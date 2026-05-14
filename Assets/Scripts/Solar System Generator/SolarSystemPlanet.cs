@@ -103,6 +103,18 @@ public class SolarSystemPlanet : MonoBehaviour
 
         gravitySource.SetMass(massMultiplier);
 
+        // ADD OUTLINE COMPONENT
+        Outline outline = GetComponent<Outline>();
+
+        if (outline == null)
+        {
+            outline = gameObject.AddComponent<Outline>();
+        }
+
+        // Configure outline
+        outline.OutlineWidth = 100f;
+        outline.enabled = false;
+
         if (!isMoon)
         {
             name = $"Planet_{actualSeed}";
