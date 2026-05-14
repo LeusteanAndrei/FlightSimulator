@@ -291,13 +291,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4f6ea627dac2cb6438a87f77dd4f6fbc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::RuntimeGrid2D
-  baseGridSize: 1
-  majorLineEvery: 10
-  minorColor: {r: 1, g: 1, b: 1, a: 1}
-  majorColor: {r: 1, g: 0, b: 0, a: 1}
-  minorFadeStart: 40
-  minorFadeEnd: 120
-  maxLines: 40000
 --- !u!1 &451620813 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 7652590961409471694, guid: e892ec972cdb94e4e93bc0cb3f9f17b9, type: 3}
@@ -994,6 +987,9 @@ MonoBehaviour:
   minorLineColor: {r: 1, g: 1, b: 1, a: 0.15}
   fadeStartZoom: 10000
   fadeEndZoom: 25000
+  rebuildEveryFrame: 1
+  movementThreshold: 5
+  zoomThreshold: 5
 --- !u!23 &1144456910
 MeshRenderer:
   m_ObjectHideFlags: 0
