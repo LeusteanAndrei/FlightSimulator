@@ -10,22 +10,22 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c1d9d480fb34dac41b6078dfbf2dfbc6, type: 3}
-  m_Name: Shape
+  m_Name: Shape 1
   m_EditorClassIdentifier: Assembly-CSharp::ShapeSettings
-  planetRadius: 2.41
+  planetRadius: 3.36
   noiseLayers:
   - enabled: 1
     useFirstlayerAsMask: 1
     noiseSettings:
       filterType: 0
       simpleNoiseSettings:
-        strength: 0.24
-        roughness: 1.87
-        centre: {x: 0, y: 0, z: 0}
-        numLayers: 6
-        persistance: 0.59
-        baseRoughness: 2.67
-        minValue: 1.39
+        strength: 0.12
+        roughness: 0.38
+        centre: {x: 0.38, y: 0, z: 0.45}
+        numLayers: 8
+        persistance: 0.62
+        baseRoughness: 2.99
+        minValue: 1.21
       rigidNoiseSettings:
         strength: 1
         roughness: 2

@@ -1061,6 +1061,54 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 436369605048371592, guid: b975d3f835d1d304b82f8d69fd894a72, type: 3}
+      propertyPath: force
+      value: 0.001
+      objectReference: {fileID: 0}
+    - target: {fileID: 2120193419282761469, guid: b975d3f835d1d304b82f8d69fd894a72, type: 3}
+      propertyPath: force
+      value: 0.001
+      objectReference: {fileID: 0}
+    - target: {fileID: 2271146209803481346, guid: b975d3f835d1d304b82f8d69fd894a72, type: 3}
+      propertyPath: force
+      value: 0.001
+      objectReference: {fileID: 0}
+    - target: {fileID: 3010547810529018172, guid: b975d3f835d1d304b82f8d69fd894a72, type: 3}
+      propertyPath: force
+      value: 0.001
+      objectReference: {fileID: 0}
+    - target: {fileID: 3260254537115502371, guid: b975d3f835d1d304b82f8d69fd894a72, type: 3}
+      propertyPath: force
+      value: 0.001
+      objectReference: {fileID: 0}
+    - target: {fileID: 3953087125059963791, guid: b975d3f835d1d304b82f8d69fd894a72, type: 3}
+      propertyPath: force
+      value: 0.001
+      objectReference: {fileID: 0}
+    - target: {fileID: 4599726674430606458, guid: b975d3f835d1d304b82f8d69fd894a72, type: 3}
+      propertyPath: far clip plane
+      value: 100000
+      objectReference: {fileID: 0}
+    - target: {fileID: 5269437975203905819, guid: b975d3f835d1d304b82f8d69fd894a72, type: 3}
+      propertyPath: force
+      value: 0.001
+      objectReference: {fileID: 0}
+    - target: {fileID: 5607448417118374954, guid: b975d3f835d1d304b82f8d69fd894a72, type: 3}
+      propertyPath: force
+      value: 0.001
+      objectReference: {fileID: 0}
+    - target: {fileID: 5624332528383454096, guid: b975d3f835d1d304b82f8d69fd894a72, type: 3}
+      propertyPath: force
+      value: 0.001
+      objectReference: {fileID: 0}
+    - target: {fileID: 5758838964068425127, guid: b975d3f835d1d304b82f8d69fd894a72, type: 3}
+      propertyPath: _mass
+      value: 0.01
+      objectReference: {fileID: 0}
+    - target: {fileID: 6203126941871608224, guid: b975d3f835d1d304b82f8d69fd894a72, type: 3}
+      propertyPath: force
+      value: 0.001
+      objectReference: {fileID: 0}
     - target: {fileID: 6762277039591140223, guid: b975d3f835d1d304b82f8d69fd894a72, type: 3}
       propertyPath: m_LocalPosition.y
       value: -1.79
@@ -1069,9 +1117,17 @@ PrefabInstance:
       propertyPath: m_LocalPosition.z
       value: 200.2
       objectReference: {fileID: 0}
+    - target: {fileID: 7837893455580871603, guid: b975d3f835d1d304b82f8d69fd894a72, type: 3}
+      propertyPath: force
+      value: 0.001
+      objectReference: {fileID: 0}
     - target: {fileID: 8424522353601682767, guid: b975d3f835d1d304b82f8d69fd894a72, type: 3}
       propertyPath: m_Name
       value: CameraPlayer
+      objectReference: {fileID: 0}
+    - target: {fileID: 8793431132189560263, guid: b975d3f835d1d304b82f8d69fd894a72, type: 3}
+      propertyPath: force
+      value: 0.001
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
