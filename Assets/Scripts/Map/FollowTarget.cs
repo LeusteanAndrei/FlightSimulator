@@ -179,9 +179,7 @@ public class FollowTarget : MonoBehaviour
                 hoveredObject = hoveredObject.parent;
             }
 
-            // Try to get any component named "Outline"
-            Outline outline =
-                hoveredObject.GetComponent<Outline>();
+            Outline outline = hoveredObject.GetComponent<Outline>();
 
             // If same outline already active, do nothing
             if (outline == currentOutline)
