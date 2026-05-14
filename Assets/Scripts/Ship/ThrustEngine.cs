@@ -35,10 +35,10 @@ public class ThrustEngine : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetKey(key))
-            Fire();
-        else if (Input.GetKeyUp(key))
-            Stop();
+        //if (Input.GetKey(key))
+        //    Fire();
+        //else if (Input.GetKeyUp(key))
+        //    Stop();
 
         if (airThruster != null)
         {
