@@ -1,3 +1,4 @@
+using System.Runtime.InteropServices;
 using Unity.VisualScripting;
 using UnityEngine;
 
@@ -8,6 +9,7 @@ public class Engine : MonoBehaviour
     public float maxStrength = 10f;
     public bool useEngine = true;
     [SerializeField] KeyCode key;
+    [SerializeField] KeyCode modifier = KeyCode.None;
     [SerializeField] private Vector3 orientation;
     [SerializeField] private Vector3 engineForce;
 
@@ -19,6 +21,7 @@ public class Engine : MonoBehaviour
 
     [SerializeField] bool activated = false;
 
+    bool reverse = false;
 
     void Start()
     {
@@ -75,9 +78,16 @@ public class Engine : MonoBehaviour
         if (useKeyboard == true)
         {
             if (Input.GetKey(key))
-                Activate();
+            {
+                if (modifier == KeyCode.None || Input.GetKey(modifier))
+                    Activate();
+            }
             else
                 Deactivate();
+        }
+        if (Input.GetKey(KeyCode.LeftControl))
+        {
+            reverse = !reverse;
         }
         if (engineEffect != null)
         {
