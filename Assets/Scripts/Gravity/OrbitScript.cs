@@ -4,7 +4,7 @@ using UnityEngine;
 public class OrbitScript : MonoBehaviour
 {
     [SerializeField]    GravitySource parentPlanet;
-    [SerializeField] GravitySource targetPlanet;
+    [SerializeField]public  GravitySource targetPlanet;
 
     [SerializeField] GravitationalOrientation orientation;
     [Header("Triggers")]
@@ -56,16 +56,47 @@ public class OrbitScript : MonoBehaviour
 
     void MaintainOrientation()
     {
+        if (orientation == null)
+        {
+            return;
+        }
 
-        Vector3 forwardOrient = orientation.GetForwardOrientation();
-        float targetAngle = orientation.GetRollAngle(forwardOrient, -thisPlanet.totalForce.normalized);
+        Vector3 towardPlanet =
+            (targetPlanet.transform.position - thisPlanet.transform.position).normalized;
+        Vector3 up = -towardPlanet;
+        Vector3 forwardOrient =
+            Vector3.ProjectOnPlane(
+                this.transform.forward,
+                up
+            ).normalized;
+
+        if (forwardOrient.sqrMagnitude < 0.001f)
+        {
+            forwardOrient = Vector3.Cross(transform.right, up).normalized;
+        }
+
+        float targetAngle =
+            orientation.GetRollAngle(forwardOrient, up);
+
         rcs.RotateTowardsVector(forwardOrient);
+
+        // Apply roll correction
         rcs.SetRoll(targetAngle);
+
+        //Vector3 forwardOrient = orientation.GetForwardOrientation();
+        //float targetAngle = orientation.GetRollAngle(forwardOrient, -thisPlanet.totalForce.normalized);
+        //rcs.RotateTowardsVector(forwardOrient);
+        //rcs.SetRoll(targetAngle);
 
     }
 
     public void FixedUpdate()
     {
+        if(StateManager.MaintainRotation)
+        {
+            MaintainOrientation();
+        }
+
         if (startOrbit)
         {
             if(maintainRoll)

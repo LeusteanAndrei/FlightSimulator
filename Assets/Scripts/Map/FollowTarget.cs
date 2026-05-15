@@ -274,7 +274,8 @@ public class FollowTarget : MonoBehaviour
             {
                 clickedObject = clickedObject.parent;
             }
-
+            StateManager.ps = clickedObject.GetComponent<PlanetScript>();
+            StateManager.gs = clickedObject.GetComponent <GravitySource>();
             Debug.Log("Clicked planet: " + clickedObject.name);
         }
     }

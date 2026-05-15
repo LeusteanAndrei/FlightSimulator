@@ -16,12 +16,14 @@ public class Engine : MonoBehaviour
     [SerializeField] private GravitationalOrientation gravOrientation = null;
     [SerializeField] private Rigidbody rb = null;
 
-    [SerializeField] private ParticleSystem engineEffect;
+    [SerializeField] private ParticleSystem normalEffect;
+    [SerializeField] private ParticleSystem reverseEffect;
+    private ParticleSystem engineEffect;
     [SerializeField] bool useKeyboard = false;
 
     [SerializeField] bool activated = false;
 
-    bool reverse = false;
+    [SerializeField] private bool reverse = false;
 
     void Start()
     {
@@ -57,6 +59,8 @@ public class Engine : MonoBehaviour
         if (!IsActive()) return;
         Vector3 engineForward = GetEngineForward();
         engineForce = engineForward * strength ;
+        if (reverse)
+            engineForce *= -1;
         rb.AddForce( engineForce );
     }
     public void Activate()
@@ -72,11 +76,31 @@ public class Engine : MonoBehaviour
     {
         return activated;
     }
+    public void Reverse()
+    {
+        reverse = true;
+        engineEffect = reverseEffect;
+        normalEffect.Stop();
 
+    }
+    public void Unreverse()
+    {
+        reverseEffect.Stop();
+        reverse = false;
+        engineEffect = normalEffect;
+    }
     void Update()
     {
-        if (useKeyboard == true)
+        if (StateManager.ByUser == true)
         {
+            if(Input.GetKey(KeyCode.LeftControl))
+            {
+                Reverse();
+            }
+            else
+            {
+                Unreverse();
+            }
             if (Input.GetKey(key))
             {
                 if (modifier == KeyCode.None || Input.GetKey(modifier))
@@ -84,10 +108,7 @@ public class Engine : MonoBehaviour
             }
             else
                 Deactivate();
-        }
-        if (Input.GetKey(KeyCode.LeftControl))
-        {
-            reverse = !reverse;
+            
         }
         if (engineEffect != null)
         {

@@ -27,61 +27,66 @@ public class CameraControl : MonoBehaviour
     }
     void Update()
     {
-        float scroll = Input.GetAxis("Mouse ScrollWheel");
-        //Debug.Log(scroll);
-        if (scroll == 0)
+        if(!StateManager.MaintainRotation && StateManager.ByUser)
         {
-            rollLeft = false;
-            rollRight = false;
-        }
-        else if (scroll < 0)
-        {
-            rollLeft = true;
-            rollRight = false;
-        }
-        else if (scroll > 0)
-        {
-            rollLeft = false;
-            rollRight = true;
-        }
-            float mouseX =
-                    Input.GetAxis("Mouse X") *
-                    mouseSensitivity *
-                    Time.deltaTime;
 
-        float mouseY =
-            Input.GetAxis("Mouse Y") *
-            mouseSensitivity *
-            Time.deltaTime;
+            float scroll = Input.GetAxis("Mouse ScrollWheel");
+            //Debug.Log(scroll);
+            if (scroll == 0)
+            {
+                rollLeft = false;
+                rollRight = false;
+            }
+            else if (scroll < 0)
+            {
+                rollLeft = true;
+                rollRight = false;
+            }
+            else if (scroll > 0)
+            {
+                rollLeft = false;
+                rollRight = true;
+            }
+                float mouseX =
+                        Input.GetAxis("Mouse X") *
+                        mouseSensitivity *
+                        Time.deltaTime;
 
-        yaw += mouseX;
-        pitch -= mouseY;
+            float mouseY =
+                Input.GetAxis("Mouse Y") *
+                mouseSensitivity *
+                Time.deltaTime;
 
-        pitch = Mathf.Clamp(pitch, -90f, 90f);
+            yaw += mouseX;
+            pitch -= mouseY;
 
-        Quaternion yawRot =
-            Quaternion.AngleAxis(
-                yaw,
-                shipOrientation.Up()
+            pitch = Mathf.Clamp(pitch, -90f, 90f);
+
+            Quaternion yawRot =
+                Quaternion.AngleAxis(
+                    yaw,
+                    shipOrientation.Up()
+                );
+
+            Quaternion pitchRot =
+                Quaternion.AngleAxis(
+                    pitch,
+                    shipOrientation.Right()
+                );
+
+            Quaternion targetRot =
+                yawRot * pitchRot;
+
+            savedForwardDirection =
+                targetRot * shipOrientation.Forward();
+
+            Debug.DrawRay(
+                transform.position,
+                savedForwardDirection * 10f,
+                Color.green
             );
+        }
 
-        Quaternion pitchRot =
-            Quaternion.AngleAxis(
-                pitch,
-                shipOrientation.Right()
-            );
-
-        Quaternion targetRot =
-            yawRot * pitchRot;
-
-        savedForwardDirection =
-            targetRot * shipOrientation.Forward();
-
-        Debug.DrawRay(
-            transform.position,
-            savedForwardDirection * 10f,
-            Color.green
-        );
     }
     float WrapAngle(float angle)
     {
@@ -97,24 +102,28 @@ public class CameraControl : MonoBehaviour
     }
     private void FixedUpdate()
     {
-        if (rollRight)
+
+        if (!StateManager.MaintainRotation && StateManager.ByUser)
         {
-            rcsManager.SetRoll(
-                WrapAngle(rcsManager.currentRollAngle + 5.0f)
-            ); 
-        }
-        else if (rollLeft)
-        {
-            rcsManager.SetRoll(
-                WrapAngle(rcsManager.currentRollAngle - 5.0f)
-            );
-        }
-        else
-            rcsManager.zAxisStop();
+            if (rollRight)
+            {
+                rcsManager.SetRoll(
+                    WrapAngle(rcsManager.currentRollAngle + 5.0f)
+                );
+            }
+            else if (rollLeft)
+            {
+                rcsManager.SetRoll(
+                    WrapAngle(rcsManager.currentRollAngle - 5.0f)
+                );
+            }
+            else
+                rcsManager.zAxisStop();
 
 
-        rcsManager.RotateTowardsVector(savedForwardDirection.normalized); 
-        yaw = Mathf.Lerp(yaw, 0f, Time.deltaTime * 2f);
-        pitch = Mathf.Lerp(pitch, 0f, Time.deltaTime * 2f);
+            rcsManager.RotateTowardsVector(savedForwardDirection.normalized);
+            yaw = Mathf.Lerp(yaw, 0f, Time.deltaTime * 2f);
+            pitch = Mathf.Lerp(pitch, 0f, Time.deltaTime * 2f);
+        }
     }
 }
