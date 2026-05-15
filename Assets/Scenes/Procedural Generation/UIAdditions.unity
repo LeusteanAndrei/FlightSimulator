@@ -12244,6 +12244,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: '::'
   SpaceShipMesh: {fileID: 1065409970}
   ReactionControlSystem: {fileID: 570566309}
+  effectiveCollisionMass: 100
 --- !u!65 &1065409975
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -12436,7 +12437,7 @@ MonoBehaviour:
     m_Bits: 1
   m_VolumeTrigger: {fileID: 0}
   m_VolumeFrameworkUpdateModeOption: 2
-  m_RenderPostProcessing: 0
+  m_RenderPostProcessing: 1
   m_Antialiasing: 0
   m_AntialiasingQuality: 2
   m_StopNaN: 0
