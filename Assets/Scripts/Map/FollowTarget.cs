@@ -214,7 +214,7 @@ public class FollowTarget : MonoBehaviour
 
     bool IsPointerOverMinimapUI()
     {
-        if (minimapUI == null)
+        if (minimapUI == null || !minimapUI.IsActive())
         {
             return false;
         }
